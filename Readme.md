@@ -194,3 +194,97 @@ class BinarySearchTest {
 - 邊界條件的處理
 - 特殊情況的處理
 - 各種輸入值的正確性
+
+
+
+# Triangle
+
+## 整體結構
+這是一個使用 JUnit 5 框架編寫的測試類別，用於測試 Triangle 類別中的 `getTriangleType` 方法。測試類別採用了分類測試的方式，將不同類型的三角形測試案例分開處理。
+
+## 測試方法分析
+
+### 1. 無效三角形測試 (not_valid_triangle)
+```java
+@Test
+void not_valid_triangle() {
+    assertAll("not validate",
+            // 測試負數邊長
+            ()-> assertEquals("Not a valid triangle", Triangle.getTriangleType(-1, 2, 3)),
+            ()-> assertEquals("Not a valid triangle", Triangle.getTriangleType(2, -2, 3)),
+            ()-> assertEquals("Not a valid triangle", Triangle.getTriangleType(2, 2, -3)),
+            
+            // 測試零邊長
+            ()-> assertEquals("Not a valid triangle", Triangle.getTriangleType(0, 2, 3)),
+            
+            // 測試兩邊之和小於等於第三邊
+            ()-> assertEquals("Not a valid triangle", Triangle.getTriangleType(1, 2, 3)),
+            ()-> assertEquals("Not a valid triangle", Triangle.getTriangleType(1, 3, 2)),
+            ()-> assertEquals("Not a valid triangle", Triangle.getTriangleType(3, 1, 2))
+    );
+}
+```
+- 測試無效三角形的三種情況：
+  - 負數邊長
+  - 零邊長
+  - 不符合三角形邊長規則（兩邊之和小於等於第三邊）
+
+### 2. 等邊三角形測試 (testEquilateral)
+```java
+@Test
+void testEquilateral() {
+    assertAll("Equilateral",
+            ()-> assertEquals("Equilateral", Triangle.getTriangleType(3, 3, 3)),
+            ()-> assertEquals("Equilateral", Triangle.getTriangleType(2, 2, 2))
+    );
+}
+```
+- 測試三邊相等的情況
+- 使用不同的邊長值進行測試
+
+### 3. 等腰三角形測試 (testIsosceles)
+```java
+@Test
+void testIsosceles() {
+    assertAll("Isosceles",
+            // 測試三種不同的等腰情況
+            ()-> assertEquals("Isosceles", Triangle.getTriangleType(3, 3, 2)),
+            ()-> assertEquals("Isosceles", Triangle.getTriangleType(2, 3, 2)),
+            ()-> assertEquals("Isosceles", Triangle.getTriangleType(2, 3, 3))
+    );
+}
+```
+- 測試三種等腰三角形的情況：
+  - 第一邊等於第二邊
+  - 第一邊等於第三邊
+  - 第二邊等於第三邊
+
+### 4. 不等邊三角形測試 (testScalene)
+```java
+@Test
+void testScalene() {
+    assertAll("Scalene",
+            ()-> assertEquals("Scalene", Triangle.getTriangleType(3, 4, 5)),
+            ()-> assertEquals("Scalene", Triangle.getTriangleType(5, 7, 9))
+    );
+}
+```
+- 測試三邊皆不相等的情況
+- 使用兩組不同的測試數據
+
+## 測試技術特點
+1. **使用 @Test 註解**：標示測試方法
+2. **使用 assertAll**：將相關的測試案例組合在一起，即使其中一個失敗，其他的也會繼續執行
+3. **Lambda 表達式**：使用 `()->` 語法來編寫測試案例
+4. **詳細的註解**：每個測試方法都有清楚的註解說明測試目的
+5. **測試案例分類**：依據三角形類型將測試分為不同方法
+6. **邊界值測試**：包含了零值、負數等邊界情況的測試
+
+## 測試覆蓋率
+根據圖片顯示，這些測試案例達到：
+- 類別覆蓋率：100%
+- 方法覆蓋率：100%
+- 行覆蓋率：85%
+- 分支覆蓋率：75%
+
+
